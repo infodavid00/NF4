@@ -1,0 +1,140 @@
+/* Define the color palette */
+$dark-blue: #384256;
+$medium-blue: #2a3447;
+$light-blue: #222b3c;
+$very-light-blue: #CAD3E1;
+$white: #FFFFFF;
+$text-color: $very-light-blue;
+$button-blue: #4C5B78;
+
+.profile-container {
+    color: $white;
+    background-color: $dark-blue;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  
+    // Enhanced profile header text styling
+    .profile-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+  
+      .profile-picture {
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border: 5px solid $light-blue;
+
+      }
+  
+      h1 {
+        margin: 0;
+        font-size: 2rem; // Larger font size for the name
+        font-weight: bold; // Bold for emphasis
+        color: $very-light-blue; // Ensure high contrast for readability
+        
+      }
+  
+      .edit-profile-btn {
+        // Button text styling
+        font-size: 1rem;
+        font-weight: 600; // Semi-bold for clarity
+      }
+    }
+  
+    // Profile info text enhancements
+    .profile-info {
+      width: 100%;
+  
+      .info-section {
+        margin-bottom: 2rem;
+  
+        h2 {
+          font-size: 1.8rem; // Larger section headings for clear segmentation
+          font-weight: bold; // Bold for section headings
+          color: $very-light-blue; // A lighter color for differentiation
+          margin-bottom: 1rem; // Space below headings
+          padding-bottom: 0.25rem; // Tighten space to underline
+          border-bottom: 2px solid $light-blue; // Solid underline for emphasis
+        }
+  
+        p {
+          font-size: 1rem; // Standardized paragraph font size
+          margin: 0.5rem 0; // Standardized paragraph spacing
+          line-height: 1.5; // Increased line height for readability
+          color: $very-light-blue; // Slightly lighter text for better contrast against the background
+        }
+      }
+    }
+  }
+  
+
+.profile-container {
+  padding: 2rem;
+  color: $dark-blue;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .profile-header {
+    margin-bottom: 2rem;
+  }
+  button {
+    padding: 0.75rem 1rem;
+    background-color: $button-blue;
+    color: $very-light-blue;;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+
+    &:hover {
+      background-color: darken($light-blue, 10%);
+      transform: translateY(-2px);
+    }
+
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+
+  .profile-content {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+    .profile-picture img {
+      border-radius: 50%; // Circular profile picture
+      width: 150px; // Adjust as needed
+      height: 150px; // Adjust as needed
+      object-fit: cover;
+    }
+
+    .profile-details {
+      h2 {
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        margin-bottom: 0.25rem;
+      }
+
+      
+    }
+  }
+}
+
+h1 {
+    margin: 0;
+    font-size: 2.5rem; // Larger font size for the name
+    font-weight: bold; // Bold for emphasis
+    color: $white; // Ensure high contrast for readability
+    
+  }
