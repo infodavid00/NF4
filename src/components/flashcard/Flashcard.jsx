@@ -1,9 +1,12 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./flashcard.css";
 
 export default function Flashcard({arr, index}) {
   const [isInBack, setisInBack] = useState(false);
+  useEffect(()=> {
+     setisInBack(false)
+  },[index])
   
  return (
   <div className="flip-card">
