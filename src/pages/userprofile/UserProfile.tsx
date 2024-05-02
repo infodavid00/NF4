@@ -1,7 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import "./userprofile.scss"; // Assuming a separate or existing stylesheet
+import axios from 'axios';
+import { jwtDecode } from "jwt-decode";
 
-const UserProfile = () => {
+const UserProfile = () => { 
+useEffect(() => {
+  const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error('No token found');
+        }
+        const payload = jwtDecode(token)
+        console.log(`https://gp-ooo8.onrender.com/users/${payload.id ?? ""}`)
+        const response = await axios.get(`https://gp-ooo8.onrender.com/users/${payload.id ?? ""}`, {
+           headers: {
+            'Content-Type': 'application/json'
+           }
+        });
+       console.log("AFTER REQUEST")
+       console.log(response.data)
+        // setCourses(response.data.courses);
+        // setLoading(false);
+      } catch (error) {
+        // setError(error);
+        // setLoading(false);
+      }
+    };
+    fetchData();
+}, []);
+
   // Extended user data example
   const [userData, setUserData] = useState({
     name: "Jane Doe",

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import '../login/loginpage.scss';
+import { Link } from 'react-router-dom';
 
 const RegisterPage = () => {
   const [email, setEmail] = useState('');
@@ -73,6 +74,9 @@ const RegisterPage = () => {
           <option value="female">Female</option>
         </select>
         </div> */}
+        <div className="form-field">
+           <Link to="/login">Login?</Link>
+        </div>
 
         {email && username && password && password.length >= 6 && <button type="submit" className="login-button">Register</button>}
       </form>
