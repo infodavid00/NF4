@@ -18,7 +18,7 @@ useEffect(() => {
            }
         });
        console.log(response.data);
-       setUserData(response.data);
+       setUserData({profilePicture: "public/profile.svg",...response.data});
       } catch (error) {
         setUserData({});
       }
