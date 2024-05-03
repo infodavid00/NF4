@@ -3,25 +3,15 @@ import './userprofile.scss'; // Assuming a separate or existing stylesheet
 import { baseurl } from '../../base.tsx';
 
 interface UserData {
-  username: string;
   email: string;
-  bio: string;
   profilePicture: string;
-  age: string;
-  gender: string;
-  location: string;
 }
 
 const UserProfile = () => {
   // Extended user data example
   const [userData, setUserData] = useState<UserData>({
-    username: 'loading...',
     email: 'loading...',
-    bio: 'loading...',
     profilePicture: 'public/profile.svg', // Placeholder path
-    age: 'loading...',
-    gender: 'loading...',
-    location: 'loading',
   });
 
   useEffect(() => {
@@ -47,13 +37,8 @@ const UserProfile = () => {
       } catch (error) {
         console.error('Error fetching user data:', error);
         setUserData({
-          username: 'error',
           email: 'error',
-          bio: 'error',
-          profilePicture: 'public/profile.svg',
-          age: 'error',
-          gender: 'error',
-          location: 'error',
+          profilePicture: 'public/profile.svg'
         });
       }
     };
@@ -66,7 +51,7 @@ const UserProfile = () => {
       <div className="profile-container">
         <div className="profile-header">
           <img src={userData.profilePicture} alt="Profile" className="profile-picture" />
-          <h1>{userData.username}</h1>
+          {/* <h1>{userData.username}</h1> */}
           {/* <button onClick={handleEditProfile} className="edit-profile-btn">Edit Profile</button> */}
         </div>
         <div className="profile-info">
@@ -75,12 +60,12 @@ const UserProfile = () => {
             <p>Email: {userData.email}</p>
             {/* <p>Location: {userData.location}</p> */}
           </div>
-          <div className="info-section">
+          {/* <div className="info-section">
             <h2>About</h2>
             <p>Bio: {userData.bio}</p>
             <p>Age: {userData.age}</p>
             <p>Gender: {userData.gender}</p>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

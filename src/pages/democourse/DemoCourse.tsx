@@ -76,6 +76,10 @@ const DemoCourse: React.FC = () => {
     formData.append('title', formTitle);
     if (file) formData.append('pdf', file);
 
+    console.log(file)
+    console.log(formData)
+    console.log(token ,id)
+
     try {
       await fetch(`https://gp-ooo8.onrender.com/chapters/${id}`, {
         method: 'POST',
@@ -84,6 +88,7 @@ const DemoCourse: React.FC = () => {
         },
         body: formData,
       });
+      console.log("DONE")
       setFormTitle('');
       setFile(null);
       setFselectedNew('');
