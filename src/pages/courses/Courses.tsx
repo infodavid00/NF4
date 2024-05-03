@@ -1,17 +1,22 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "./courses.scss";
 
+interface Course {
+  _id: string;
+  title: string;
+  description: string;
+}
+
 const Courses = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [newCourseTitle, setNewCourseTitle] = useState('');
-  const [newCourseDescription, setNewCourseDescription] = useState('');
-  const history = useNavigate();
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [showAddForm, setShowAddForm] = useState<boolean>(false);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<any>(null);
+  const [newCourseTitle, setNewCourseTitle] = useState<string>('');
+  const [newCourseDescription, setNewCourseDescription] = useState<string>('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -21,13 +26,18 @@ const Courses = () => {
           throw new Error('No token found');
         }
 
-        const response = await axios.get('https://gp-ooo8.onrender.com/courses', {
+        const response = await fetch('https://gp-ooo8.onrender.com/courses', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
         });
 
-        setCourses(response.data.courses);
+        if (!response.ok) {
+          throw new Error('Failed to fetch courses');
+        }
+
+        const data = await response.json();
+        setCourses(data.courses);
         setLoading(false);
       } catch (error) {
         setError(error);
@@ -38,7 +48,7 @@ const Courses = () => {
     fetchCourses();
   }, []);
 
-  const handleSearchChange = (e) => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
@@ -46,18 +56,26 @@ const Courses = () => {
     setShowAddForm(!showAddForm);
   };
 
-  const handleSubmitCourse = async (e) => {
+  const handleSubmitCourse = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.post('https://gp-ooo8.onrender.com/courses', {
-        title: newCourseTitle,
-        description: newCourseDescription
-      }, {
+      const response = await fetch('https://gp-ooo8.onrender.com/courses', {
+        method: 'POST',
         headers: {
+          'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
-        }
+        },
+        body: JSON.stringify({
+          title: newCourseTitle,
+          description: newCourseDescription
+        })
       });
+
+      if (!response.ok) {
+        throw new Error('Failed to add course');
+      }
+
       setNewCourseTitle('');
       setNewCourseDescription('');
       setShowAddForm(false);
@@ -67,11 +85,9 @@ const Courses = () => {
     }
   };
 
-  const navigateToCoursePage = (courseId) => {
-    history(`/courses/${courseId}`);
+  const navigateToCoursePage = (courseId: string) => {
+    navigate(`/courses/${courseId}`);
   };
-
-  
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error loading courses: {error.message}</div>;
@@ -95,8 +111,7 @@ const Courses = () => {
         </div>
       </div>
       {showAddForm && (
-        
-        <form  onSubmit={handleSubmitCourse} className="add-course-form">
+        <form onSubmit={handleSubmitCourse} className="add-course-form">
           <input 
             type="text"
             placeholder="Course Title"
@@ -115,7 +130,6 @@ const Courses = () => {
         <table className="courses-table">
           <thead>
             <tr>
-              {/* <th>ID</th> */}
               <th>Name</th>
               <th>Description</th>
             </tr>
@@ -123,7 +137,6 @@ const Courses = () => {
           <tbody>
             {courses.filter((course) => course.title.toLowerCase().includes(searchTerm.toLowerCase())).map((course, index) => (
               <tr key={index} onClick={() => navigateToCoursePage(course._id)} style={{cursor: 'pointer'}}>
-                {/* <td>{course._id}</td> */}
                 <td>{course.title}</td>
                 <td>{course.description}</td>
               </tr>

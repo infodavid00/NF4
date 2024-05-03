@@ -1,8 +1,6 @@
 import { useState } from 'react';
-import axios from 'axios';
-import '../login/loginpage.scss';
 import { Link } from 'react-router-dom';
-import  { baseurl} from '../../base.jsx';
+import { baseurl } from '../../base.tsx';
 
 const RegisterPage = () => {
   const [email, setEmail] = useState('');
@@ -13,24 +11,34 @@ const RegisterPage = () => {
   const [age, setAge] = useState('');
   const [gender, setGender] = useState('');
 
-  const handleSubmit = async (event: { preventDefault: () => void; }) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const response = await axios.post(`${baseurl}/users/register`, {
-        email: email,
-        username: username,
-        password: password,
-        bio,
-        age,
-        gender,
-        address
+      const response = await fetch(`${baseurl}/users/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          username: username,
+          password: password,
+          bio: bio,
+          age: age,
+          gender: gender,
+          address: address,
+        }),
       });
-      window.location.href = '/login';
-    } catch (error) {
-      console.error('Login failed:', error);
-      if (axios.isAxiosError(error) && error.response) {
-        console.error('Error response:', error.response.data);
+
+      if (!response.ok) {
+        throw new Error('Failed to register');
       }
+
+      window.location.href = '/login';
+    } catch (error: any) {
+      console.error('Registration failed:', error);
+      const responseData: any = await error.response?.json();
+      console.error('Error response:', responseData);
     }
   };
 
@@ -64,14 +72,14 @@ const RegisterPage = () => {
           <input type="number" id="age" value={age} onChange={(e) => setAge(e.target.value)} />
         </div>
         <div className="form-field">
-        <label htmlFor="gender">Gender:</label>
-        <select id='reg-select' value={gender} onChange={(e) => setGender(e.target.value)}>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-        </select>
-        </div> 
+          <label htmlFor="gender">Gender:</label>
+          <select id="reg-select" value={gender} onChange={(e) => setGender(e.target.value)}>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
         <div className="form-field">
-           <Link to="/login">Login?</Link>
+          <Link to="/login">Login?</Link>
         </div>
 
         {email && username && password && password.length >= 6 && address && bio && age && gender && <button type="submit" className="login-button">Register</button>}

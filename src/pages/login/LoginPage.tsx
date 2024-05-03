@@ -1,30 +1,35 @@
-import { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import './loginpage.scss';
 import { Link } from 'react-router-dom';
-import  { baseurl} from '../../base.jsx';
+import { baseurl } from '../../base.tsx';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = async (event: { preventDefault: () => void; }) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const response = await axios.post(`${baseurl}/users/login`, {
-        email: email,
-        password: password
+      const response = await fetch(`${baseurl}/users/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password
+        })
       });
-      const { token } = response.data;
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+      if (!response.ok) {
+        throw new Error('Failed to login');
+      }
+
+      const { token } = await response.json();
       localStorage.setItem('token', token);
       window.location.href = '/courses';
-      
     } catch (error) {
       console.error('Login failed:', error);
-      if (axios.isAxiosError(error) && error.response) {
-        console.error('Error response:', error.response.data);
-      }
     }
   };
 

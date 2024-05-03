@@ -1,4 +1,3 @@
-import React from 'react';
 import './home.scss'; // Make sure the path to your SCSS file is correct
 
 const HomeDashboard = () => {
