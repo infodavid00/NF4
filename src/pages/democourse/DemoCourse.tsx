@@ -49,7 +49,9 @@ const DemoCourse: React.FC = () => {
           throw new Error('Failed to fetch course data');
         }
 
-        const { chapters, summary, flashCards } = await response.json();
+        const course = await response.json()
+        const { chapters, summary, flashCards } = course.course;
+        // console.log(chapters, summary, flashCards)
 
         // Set mock data if the response is empty
         setChaptersData(chapters || []);
