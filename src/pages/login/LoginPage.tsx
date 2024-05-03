@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import './loginpage.scss';
 import { Link } from 'react-router-dom';
+import  { baseurl} from '../../base.jsx';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -10,7 +11,7 @@ const LoginPage = () => {
   const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     try {
-      const response = await axios.post('https://gp-ooo8.onrender.com/users/login', {
+      const response = await axios.post(`${baseurl}/users/login`, {
         email: email,
         password: password
       });

@@ -1,7 +1,7 @@
 import React, { useState , useEffect} from 'react';
 import "./userprofile.scss"; // Assuming a separate or existing stylesheet
 import axios from 'axios';
-import { jwtDecode } from "jwt-decode";
+import  { baseurl} from '../../base.jsx';
 
 const UserProfile = () => { 
 useEffect(() => {
@@ -11,20 +11,16 @@ useEffect(() => {
         if (!token) {
           throw new Error('No token found');
         }
-        const payload = jwtDecode(token)
-        console.log(`https://gp-ooo8.onrender.com/users/${payload.id ?? ""}`)
-        const response = await axios.get(`https://gp-ooo8.onrender.com/users/${payload.id ?? ""}`, {
+        const response = await axios.get(`${baseurl}/users/info`, {
            headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
            }
         });
-       console.log("AFTER REQUEST")
-       console.log(response.data)
-        // setCourses(response.data.courses);
-        // setLoading(false);
+       console.log(response.data);
+       setUserData(response.data);
       } catch (error) {
-        // setError(error);
-        // setLoading(false);
+        setUserData({});
       }
     };
     fetchData();
@@ -32,19 +28,19 @@ useEffect(() => {
 
   // Extended user data example
   const [userData, setUserData] = useState({
-    name: "Jane Doe",
-    email: "jane.doe@example.com",
-    bio: "Experienced software developer with a passion for building scalable web applications.",
+    username: "loading...",
+    email: "loading...",
+    bio: "loading...",
     profilePicture: "public/profile.svg", // Placeholder path
-    age: 30,
-    gender: "Female",
-    location: "San Francisco, CA",
+    age: "loading...",
+    gender: "loading...",
+    location: "loading",
   });
 
   // Handler for edit functionality (placeholder)
-  const handleEditProfile = () => {
-    console.log("Edit Profile Clicked");
-  };
+  // const handleEditProfile = () => {
+  //   console.log("Edit Profile Clicked");
+  // };
 
   return (
     <div className="profile-container">
@@ -52,20 +48,20 @@ useEffect(() => {
       <div className="profile-container">
       <div className="profile-header">
         <img src={userData.profilePicture} alt="Profile" className="profile-picture"/>
-        <h1>{userData.name}</h1>
-        <button onClick={handleEditProfile} className="edit-profile-btn">Edit Profile</button>
+        <h1>{userData.username ?? "error"}</h1>
+        {/* <button onClick={handleEditProfile} className="edit-profile-btn">Edit Profile</button> */}
       </div>
       <div className="profile-info">
         <div className="info-section">
           <h2>Contact Information</h2>
-          <p>Email: {userData.email}</p>
-          <p>Location: {userData.location}</p>
+          <p>Email: {userData.email ?? "error"}</p>
+          <p>Location: {userData.address ?? "error"}</p>
         </div>
         <div className="info-section">
           <h2>About</h2>
-          <p>Bio: {userData.bio}</p>
-          <p>Age: {userData.age}</p>
-          <p>Gender: {userData.gender}</p>
+          <p>Bio: {userData.bio ?? "error"}</p>
+          <p>Age: {userData.age ?? "error"}</p>
+          <p>Gender: {userData.gender ?? "error"}</p>
         </div>
       </div>
       </div>

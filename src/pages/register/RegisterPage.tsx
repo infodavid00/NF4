@@ -2,30 +2,30 @@ import { useState } from 'react';
 import axios from 'axios';
 import '../login/loginpage.scss';
 import { Link } from 'react-router-dom';
+import  { baseurl} from '../../base.jsx';
 
 const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  // const [name, setName] = useState('');
-  // const [address, setAddress] = useState('');
-  // const [bio, setBio] = useState('');
-  // const [age, setAge] = useState('');
-  // const [gender, setGender] = useState('');
+  const [address, setAddress] = useState('');
+  const [bio, setBio] = useState('');
+  const [age, setAge] = useState('');
+  const [gender, setGender] = useState('');
 
   const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     try {
-      const response = await axios.post('https://gp-ooo8.onrender.com/users/register', {
+      const response = await axios.post(`${baseurl}/users/register`, {
         email: email,
         username: username,
-        password: password
+        password: password,
+        bio,
+        age,
+        gender,
+        address
       });
-      const { token } = response.data;
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      localStorage.setItem('token', token);
-      window.location.href = '/';
-      
+      window.location.href = '/login';
     } catch (error) {
       console.error('Login failed:', error);
       if (axios.isAxiosError(error) && error.response) {
@@ -51,10 +51,6 @@ const RegisterPage = () => {
           <label htmlFor="password">Password:</label>
           <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
-        {/*<div className="form-field">
-          <label htmlFor="name">Name:</label>
-          <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} />
-        </div>
         <div className="form-field">
           <label htmlFor="addy">Address:</label>
           <input type="text" id="addy" value={address} onChange={(e) => setAddress(e.target.value)} />
@@ -73,12 +69,12 @@ const RegisterPage = () => {
           <option value="male">Male</option>
           <option value="female">Female</option>
         </select>
-        </div> */}
+        </div> 
         <div className="form-field">
            <Link to="/login">Login?</Link>
         </div>
 
-        {email && username && password && password.length >= 6 && <button type="submit" className="login-button">Register</button>}
+        {email && username && password && password.length >= 6 && address && bio && age && gender && <button type="submit" className="login-button">Register</button>}
       </form>
     </div>
   );
